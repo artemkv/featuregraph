@@ -1,0 +1,38 @@
+# featuregraph-user-pool
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Creates an environment for the user service
+
+Resources:
+
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: featuregraph-user-pool
+      UsernameAttributes:
+        - email
+      Schema:
+        - Name: email
+          AttributeDataType: String
+          Mutable: false
+          Required: true
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireUppercase: true
+      AutoVerifiedAttributes:
+        - email
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: featuregraph-web-service
+      GenerateSecret: false
+      UserPoolId: !Ref UserPool
+      PreventUserExistenceErrors: ENABLED

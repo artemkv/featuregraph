@@ -1,0 +1,151 @@
+.small {
+  font-size: smaller;
+}
+
+.application-list-app-name {
+  font-weight: 600;
+}
+
+.distance {
+  margin-left: 8px;
+}
+
+.double-distance-right {
+  margin-right: 16px;
+}
+
+.hero {
+  height: 300px;
+  opacity: 1;
+  background-image: url('../public/hero_chart.png');
+}
+
+.footer {
+  height: 100px;
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.panel {
+  margin: 10px;
+}
+
+.cell {
+  height: 50px;
+}
+
+.bt {
+  border-top: 1px solid #f5f5f5;
+}
+
+.br {
+  border-right: 1px solid #f5f5f5;
+}
+
+.bb {
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.bl {
+  border-left: 1px solid #f5f5f5;
+}
+
+.gridrow {
+  margin-bottom: 0px;
+}
+
+.input-date-picker {
+  background-color: rgba(255, 255, 255, 0.9);
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #f2f2f2;
+  border-radius: 2px;
+  height: 3rem;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.doc-page h1,
+.doc-page h2,
+.doc-page h3 {
+  font: revert;
+}
+
+.doc-page ul>li {
+  list-style-type: disc;
+  margin-left: 32px;
+}
+
+.doc-toc-link {
+  text-decoration: none;
+  color: black;
+  margin: 32px;
+  font-size: medium;
+}
+
+.doc-toc-link-container {
+  margin: 16px;
+}
+
+.doc-page pre {
+  background-color: #f5f5f5;
+  padding: 8px;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+/* Desktop Styles */
+@media only screen and (min-width: 961px) {
+  .doc-page {
+    margin-right: 100px;
+  }
+
+  .desktop {
+    display: block;
+  }
+
+  .mobile {
+    display: none;
+  }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 401px) and (max-width: 960px) {
+  .doc-page {
+    margin-right: 100px;
+  }
+
+  .desktop {
+    display: block;
+  }
+
+  .mobile {
+    display: none;
+  }
+}
+
+/* Mobile Styles */
+@media only screen and (max-width: 400px) {
+  .hero {
+    display: none;
+  }
+
+  .footer {
+    height: 10px;
+  }
+
+  .desktop {
+    display: none;
+  }
+
+  .mobile {
+    display: block;
+  }
+}

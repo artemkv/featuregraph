@@ -3,7 +3,6 @@ package app
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sns"
@@ -24,7 +23,7 @@ func EnqueueMessage(message interface{}) (string, error) {
 	msg := string(bytes)
 
 	// TODO: debug code
-	fmt.Printf("SENDING: %s", msg)
+	// fmt.Printf("SENDING: %s", msg)
 
 	// init client
 	cfg, err := config.LoadDefaultConfig(context.TODO())

@@ -43,20 +43,23 @@ FEATUREGRAPH_KEY_FILE=key.unencrypted.pem
 POST /events
 
 {
+    "t": "events",
+    "v": "1.0.0",
     "acc": "f1a3671f-4740-4092-9e1a-21a97f867b5e",
     "aid": "9735965b-e1cb-4d7f-adb9-a4adf457f61a",
+    "is_prod": "true",
     "evts": [
         {
             "id": "7b586b58-c0b6-48d2-9104-df7aadd3682a",
-            "feature": "f_1",
+            "f": "f_1",
             "prev": null
         },
         {
             "id": "0c4795f0-6572-40c1-b18f-f76fc830b9f3",
-            "feature": "f_2",
+            "f": "f_2",
             "prev": {
                 "id": "7b586b58-c0b6-48d2-9104-df7aadd3682a",
-                "feature": "f_1"
+                "f": "f_1"
             }
         }
     ]

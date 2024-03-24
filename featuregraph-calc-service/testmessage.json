@@ -1,0 +1,20 @@
+{
+    "Records": [
+        {
+            "messageId": "35431bb2-2874-41ec-9dbf-174cf8da8f96",
+            "receiptHandle": "AQEBzPLFeQ5wvZSdDNMfQRWpyIg4nD/QgqOlTylEKrDRl42jcLAi/wDO38KoWqnfJVjVho8ti/mgffuOhUZuW22zVKsFTZ/V03Vq7D8HqHhYrjYeGS3ata0yaQKneYnTZIJCcUlbhv4TDV0EW+stCIys7v9saNompg+5W/dahxoTdsrOvDHrQgc2zib47M9WIciYCT06Fi87bkqQ9gP94W6VKtyD0ENi+n1JsgmzlQf0CBy9baRgLHfqubkhyvdbPhlrSrnhNTfEFd/RCT8FYPWSlOIF4zW0a07jCpyCdi7EXopuqvWRKUuY+wf/AaiFikkns8iNoSWPvZy7bkXO7jcv5Hq0dSf8ZUHGudG65+ItwQaUiRaBP/7xWHP22Vwzn9Aq4c5rp6Ul0KsixgVf+fYshw==",
+            "body": "{\"t\":\"events\",\"v\":\"1.0.0\",\"acc\":\"9b91a065-4ea1-4d5f-b6db-0d0912ff051a\",\"aid\":\"624652a6-89ff-405d-a887-e24ccd1333bc\",\"is_prod\":false,\"tss\":\"2024-03-24T16:40:17Z\",\"evts\":[{\"id\":\"1ecd67f1-44d0-4b2c-9477-497e94e71d34\",\"f\":\"D1_Div\",\"prev\":{\"id\":\"a7bdf237-59bb-41b7-af41-c06bfe597af4\",\"f\":\"D1_Div\"}}]}",
+            "attributes": {
+                "ApproximateReceiveCount": "1",
+                "SentTimestamp": "1629991089416",
+                "SenderId": "473928362053",
+                "ApproximateFirstReceiveTimestamp": "1629991089456"
+            },
+            "messageAttributes": {},
+            "md5OfBody": "47bce5c74f589f4867dbd57e9ca9f808",
+            "eventSource": "aws:sqs",
+            "eventSourceARN": "arn:aws:sqs:us-east-1:473928362053:featuregraph-messages",
+            "awsRegion": "us-east-1"
+        }
+    ]
+}

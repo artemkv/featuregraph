@@ -1,0 +1,20 @@
+service: featuregraph-calc
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  versionFunctions: false
+
+functions:
+  compute-stats:
+    role:
+      Fn::ImportValue: FeatureGraphCalcServiceRoleARN
+    handler: handler.consume
+    timeout: 10 # seconds
+    events:
+      - sqs:
+          arn:
+            Fn::ImportValue: FeatureGraphMessageQueueARN
+          batchSize: 10
+          maximumBatchingWindow: 60 # 1 minute

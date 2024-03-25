@@ -44,8 +44,14 @@ serverless deploy list functions --aws-profile fg_serverless
 
 Invoke locally (use local DynamoDB)
 
+First message:
 ```
-serverless invoke local --function compute-stats --path=testmessage.json --env IS_OFFLINE=true --env AWS_ACCESS_KEY_ID=fakeMyKeyId --env AWS_SECRET_ACCESS_KEY=fakeSecretAccessKey
+serverless invoke local --function compute-stats --path=test_first_message.json --env IS_OFFLINE=true --env AWS_ACCESS_KEY_ID=fakeMyKeyId --env AWS_SECRET_ACCESS_KEY=fakeSecretAccessKey
+```
+
+Any other message:
+```
+serverless invoke local --function compute-stats --path=test_next_message.json --env IS_OFFLINE=true --env AWS_ACCESS_KEY_ID=fakeMyKeyId --env AWS_SECRET_ACCESS_KEY=fakeSecretAccessKey
 ```
 
 ## Timeouts

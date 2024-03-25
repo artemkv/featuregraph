@@ -17,3 +17,7 @@ func isAppIdValid(appId string) bool {
 func isAppNameValid(appName string) bool {
 	return len(appName) <= 100
 }
+
+func isAppConfigValid(appConfig string) bool {
+	return len(appConfig) <= 10240
+}

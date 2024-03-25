@@ -60,7 +60,7 @@ func handleSignIn(c *gin.Context) {
 	// if this step fails, some empty metadata has to be provided dynamically upon listing apps,
 	// forcing the user to update the data
 	if isNewUser {
-		err = createApp(newAccId, defaultAppId, "default", createdAt)
+		err = createApp(newAccId, defaultAppId, "default", "{}", createdAt)
 		if err != nil {
 			toInternalServerError(c, err.Error())
 			return

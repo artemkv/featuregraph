@@ -7,22 +7,30 @@ import (
 )
 
 type accountDataOut struct {
-	AccountId string       `json:"acc"`
-	Apps      []appDataOut `json:"apps"`
+	AccountId string            `json:"acc"`
+	Apps      []appShortDataOut `json:"apps"`
 }
 
-type appDataOut struct {
+type appShortDataOut struct {
 	Id   string `json:"aid"`
 	Name string `json:"name"`
 }
 
+type appFullDataOut struct {
+	Id     string `json:"aid"`
+	Name   string `json:"name"`
+	Config string `json:"config"`
+}
+
 type postAppDataIn struct {
-	Name string `json:"name" binding:"required"`
+	Name   string `json:"name" binding:"required"`
+	Config string `json:"config" binding:"required"`
 }
 
 type putAppDataIn struct {
-	Id   string `json:"aid" binding:"required"`
-	Name string `json:"name" binding:"required"`
+	Id     string `json:"aid" binding:"required"`
+	Name   string `json:"name" binding:"required"`
+	Config string `json:"config" binding:"required"`
 }
 
 type appRefData struct {
@@ -85,9 +93,10 @@ func handleGetApp(c *gin.Context, userId string, _ string, accId string) {
 
 	// create response
 	if app == nil {
-		app = &appDataOut{
-			Id:   appId,
-			Name: "unknown",
+		app = &appFullDataOut{
+			Id:     appId,
+			Name:   "unknown",
+			Config: "{}",
 		}
 	}
 	toSuccess(c, app)
@@ -127,6 +136,11 @@ func handlePostApp(c *gin.Context, userId string, _ string, accId string) {
 		toBadRequest(c, err)
 		return
 	}
+	if !isAppConfigValid(app.Config) {
+		err := fmt.Errorf("invalid config for application, should be less than 10Kib")
+		toBadRequest(c, err)
+		return
+	}
 
 	// add app to user
 	appId := generateNewAppId(accId)
@@ -140,16 +154,17 @@ func handlePostApp(c *gin.Context, userId string, _ string, accId string) {
 	// save app metadata
 	// if this step fails, app will appear in the list but empty metadata will be shown,
 	// forcing owner to do update again
-	err = createApp(accId, appId, app.Name, createdAt)
+	err = createApp(accId, appId, app.Name, app.Config, createdAt)
 	if err != nil {
 		toInternalServerError(c, err.Error())
 		return
 	}
 
 	// create response
-	response := appDataOut{
-		Id:   appId,
-		Name: app.Name,
+	response := appFullDataOut{
+		Id:     appId,
+		Name:   app.Name,
+		Config: app.Config,
 	}
 	toCreated(c, response)
 }
@@ -185,6 +200,11 @@ func handlePutApp(c *gin.Context, userId string, _ string, accId string) {
 		toBadRequest(c, err)
 		return
 	}
+	if !isAppConfigValid(app.Config) {
+		err := fmt.Errorf("invalid config for application, should be less than 10Kib")
+		toBadRequest(c, err)
+		return
+	}
 
 	// check access rights
 	canWrite, err := canWrite(userId, app.Id)
@@ -195,7 +215,7 @@ func handlePutApp(c *gin.Context, userId string, _ string, accId string) {
 
 	// try updating existing app
 	updatedAt := generateTimestamp()
-	updated, err := updateApp(accId, app.Id, app.Name, updatedAt)
+	updated, err := updateApp(accId, app.Id, app.Name, app.Config, updatedAt)
 	if err != nil {
 		toInternalServerError(c, err.Error())
 		return
@@ -204,7 +224,7 @@ func handlePutApp(c *gin.Context, userId string, _ string, accId string) {
 	// if not found, create new
 	if !updated {
 		createdAt := generateTimestamp()
-		err = createApp(accId, app.Id, app.Name, createdAt)
+		err = createApp(accId, app.Id, app.Name, app.Config, createdAt)
 		if err != nil {
 			toInternalServerError(c, err.Error())
 			return
@@ -212,7 +232,7 @@ func handlePutApp(c *gin.Context, userId string, _ string, accId string) {
 	}
 
 	// create response
-	response := appDataOut(app)
+	response := appFullDataOut(app)
 	toSuccess(c, response)
 }
 
@@ -259,8 +279,8 @@ func handleDeleteApp(c *gin.Context, userId string, _ string, accId string) {
 	toNoContent(c)
 }
 
-func assembleGetUserAppsResponse(apps []string, appsMetadata map[string]string) []appDataOut {
-	response := make([]appDataOut, 0, len(apps))
+func assembleGetUserAppsResponse(apps []string, appsMetadata map[string]string) []appShortDataOut {
+	response := make([]appShortDataOut, 0, len(apps))
 
 	for _, appId := range apps {
 		appName := "unknown"
@@ -268,7 +288,7 @@ func assembleGetUserAppsResponse(apps []string, appsMetadata map[string]string) 
 			appName = name
 		}
 
-		response = append(response, appDataOut{
+		response = append(response, appShortDataOut{
 			Id:   appId,
 			Name: appName,
 		})

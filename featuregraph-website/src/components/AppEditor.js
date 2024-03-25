@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import M from 'materialize-css/dist/js/materialize.min.js';
-import {appsPath} from '../routing';
+import { appsPath } from '../routing';
 
 export default (props) => {
     const app = props.app;
@@ -17,9 +17,33 @@ export default (props) => {
         return '';
     };
 
+    // TODO: does not really belong here, in a UI component
+    const validateConfig = (config) => {
+        if (!config) {
+            return 'Config is required';
+        }
+        if (config.length > 10240) {
+            return 'Config cannot be longer than 10240 characters';
+        }
+        try {
+            JSON.parse(config);
+        }
+        catch
+        {
+            return 'Config is not a valid JSON';
+        }
+
+        return '';
+    };
+
     const [name, setName] = useState(app.name);
     const [nameValidationResult, setNameValidationResult] = useState('');
-    const [isValid, setIsValid] = useState(!validateName(app.name));
+
+    const [config, setConfig] = useState(app.config);
+    const [configValidationResult, setConfigValidationResult] = useState('');
+
+    // TODO: combined validation result
+    const [isValid, setIsValid] = useState(!validateName(app.name) && !validateConfig(app.config));
 
     useEffect(() => {
         M.updateTextFields();
@@ -29,13 +53,21 @@ export default (props) => {
         const newName = event.target.value;
         setName(newName);
         setNameValidationResult(validateName(newName));
-        setIsValid(!validateName(newName));
+        setIsValid(!validateName(newName) && !validateConfig(config));
+    };
+
+    const onConfigChange = (event) => {
+        const newConfig = event.target.value;
+        setConfig(newConfig);
+        setConfigValidationResult(validateConfig(newConfig));
+        setIsValid(!validateName(name) && !validateConfig(newConfig));
     };
 
     const submit = () => {
         props.onSubmit({
             aid: app.aid,
-            name
+            name,
+            config
         });
     };
 
@@ -45,7 +77,7 @@ export default (props) => {
 
                 <div className="row">
                     <Link to={appsPath}>
-            &lt; Back
+                        &lt; Back
                     </Link>
                 </div>
                 <div className="row">
@@ -64,12 +96,23 @@ export default (props) => {
                     </div>
                 </div>
                 <div className="row">
+                    <div className="input-field">
+                        <textarea
+                            value={config}
+                            id="app_editor_app_config"
+                            className={'materialize-textarea ' + (configValidationResult ? 'invalid' : 'valid')}
+                            onChange={onConfigChange} />
+                        <label htmlFor="app_editor_app_config">Config</label>
+                        <span className="helper-text" data-error={configValidationResult} />
+                    </div>
+                </div>
+                <div className="row">
                     <div className="right-align">
                         <div>
                             <button
                                 className={'btn waves-effect waves-light' + (isValid ? '' : ' disabled')}
                                 onClick={submit}>
-                        Save
+                                Save
                                 <i className="material-icons right">check_circle</i>
                             </button>
                         </div>

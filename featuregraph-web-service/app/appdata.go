@@ -23,6 +23,7 @@ var (
 	APP_TABLE_USER_EMAIL_ATTR  string = "email"
 	APP_TABLE_USER_APPS_ATTR   string = "apps"
 	APP_TABLE_APP_NAME_ATTR    string = "name"
+	APP_TABLE_APP_CONFIG_ATTR  string = "config"
 	APP_TABLE_CREATED_AT_ATTR  string = "createdAt"
 	APP_TABLE_UPDATED_AT_ATTR  string = "udpatedAt"
 )
@@ -40,9 +41,15 @@ type userAccItem struct {
 	Apps []string
 }
 
-type userAppMetadataItem struct {
+type userAppShortMetadataItem struct {
 	SortKey string
 	Name    string
+}
+
+type userAppFullMetadataItem struct {
+	SortKey string
+	Name    string
+	Config  string
 }
 
 func canRead(userId string, appId string) (bool, error) {
@@ -353,7 +360,7 @@ func removeUserApp(userId string, appId string) error {
 	return nil
 }
 
-func getApp(accId string, appId string) (*appDataOut, error) {
+func getApp(accId string, appId string) (*appFullDataOut, error) {
 	// get service
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
@@ -368,7 +375,8 @@ func getApp(accId string, appId string) (*appDataOut, error) {
 	// query expression
 	projection := expression.NamesList(
 		expression.Name(APP_TABLE_SORT_KEY),
-		expression.Name(APP_TABLE_APP_NAME_ATTR))
+		expression.Name(APP_TABLE_APP_NAME_ATTR),
+		expression.Name(APP_TABLE_APP_CONFIG_ATTR))
 	expr, err := expression.NewBuilder().WithProjection(projection).Build()
 	if err != nil {
 		return nil, logAndConvertError(err)
@@ -395,14 +403,15 @@ func getApp(accId string, appId string) (*appDataOut, error) {
 	if result.Item == nil {
 		return nil, nil
 	}
-	item := userAppMetadataItem{}
+	item := userAppFullMetadataItem{}
 	err = attributevalue.UnmarshalMap(result.Item, &item)
 	if err != nil {
 		return nil, logAndConvertError(err)
 	}
-	app := appDataOut{
-		Id:   item.SortKey,
-		Name: item.Name,
+	app := appFullDataOut{
+		Id:     item.SortKey,
+		Name:   item.Name,
+		Config: item.Config,
 	}
 
 	return &app, nil
@@ -447,7 +456,7 @@ func getApps(accId string) (map[string]string, error) {
 	// re-pack the results
 	apps := make(map[string]string, len(result.Items))
 	for _, v := range result.Items {
-		item := userAppMetadataItem{}
+		item := userAppShortMetadataItem{}
 
 		err = attributevalue.UnmarshalMap(v, &item)
 		if err != nil {
@@ -461,7 +470,7 @@ func getApps(accId string) (map[string]string, error) {
 	return apps, nil
 }
 
-func createApp(accId string, appId string, appName string, createdAt string) error {
+func createApp(accId string, appId string, appName string, appConfig string, createdAt string) error {
 	// get service
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
@@ -480,6 +489,7 @@ func createApp(accId string, appId string, appName string, createdAt string) err
 			APP_TABLE_KEY:             &types.AttributeValueMemberS{Value: hashKey},
 			APP_TABLE_SORT_KEY:        &types.AttributeValueMemberS{Value: sortKey},
 			APP_TABLE_APP_NAME_ATTR:   &types.AttributeValueMemberS{Value: appName},
+			APP_TABLE_APP_CONFIG_ATTR: &types.AttributeValueMemberS{Value: appConfig},
 			APP_TABLE_CREATED_AT_ATTR: &types.AttributeValueMemberS{Value: createdAt},
 		},
 		ReturnValues: types.ReturnValueNone,
@@ -495,7 +505,7 @@ func createApp(accId string, appId string, appName string, createdAt string) err
 	return nil
 }
 
-func updateApp(accId string, appId string, appName string, updatedAt string) (bool, error) {
+func updateApp(accId string, appId string, appName string, appConfig string, updatedAt string) (bool, error) {
 	// get service
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
@@ -512,6 +522,8 @@ func updateApp(accId string, appId string, appName string, updatedAt string) (bo
 		expression.Set(
 			expression.Name(APP_TABLE_APP_NAME_ATTR),
 			expression.Value(appName)).Set(
+			expression.Name(APP_TABLE_APP_CONFIG_ATTR),
+			expression.Value(appConfig)).Set(
 			expression.Name(APP_TABLE_UPDATED_AT_ATTR),
 			expression.Value(updatedAt)),
 	).WithCondition(

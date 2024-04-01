@@ -6,8 +6,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func getHashKey(keyPrefix string, appId string, build string) string {
-	return fmt.Sprintf("%s#%s#%s", keyPrefix, appId, build)
+func getHashKey(keyPrefix string, appId string, environment string) string {
+	return fmt.Sprintf("%s#%s#%s", keyPrefix, appId, environment)
 }
 
 func logAndConvertError(err error) error {

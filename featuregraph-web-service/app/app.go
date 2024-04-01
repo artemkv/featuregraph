@@ -39,7 +39,9 @@ func SetupRouter(router *gin.Engine, allowedOrigin string) {
 
 	// do business
 
-	// TODO: feature graph data
+	// feature graph data
+	router.GET("/graph_per_period", reststats.HandleEndpointWithStats(
+		withAuthentication(handleStatsPerPeriod)))
 
 	// account
 	router.GET("/acc", reststats.HandleEndpointWithStats(

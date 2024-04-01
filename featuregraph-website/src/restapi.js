@@ -1,5 +1,5 @@
 // TODO: where to configure it?
-// const baseUrl = 'https://web.featuregraph.net';
+// const baseUrl = 'https://services.featuregraph.net:8070';
 const baseUrl = 'http://127.0.0.1:8700';
 
 class ApiError extends Error {
@@ -119,4 +119,8 @@ export const putApp = (session, app) => {
 
 export const postApp = (session, app) => {
     return postJson(`/apps`, app, session);
+};
+
+export const getGraphDataPerPeriod = (appId, env, period, dt, session) => {
+    return getJson(`/graph_per_period?aid=${appId}&period=${period}&dt=${dt}&env=${env}`, session);
 };

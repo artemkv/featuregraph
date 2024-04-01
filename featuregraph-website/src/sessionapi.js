@@ -105,3 +105,9 @@ export const postApp = (app) => {
         return api.postApp(getSession(), app);
     });
 };
+
+export const getGraphDataPerPeriod = (appId, env, period, dt) => {
+    return callApi(() => {
+        return api.getGraphDataPerPeriod(appId, env, period, dt, getSession());
+    });
+};

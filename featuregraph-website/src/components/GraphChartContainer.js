@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import * as dateTimeUtil from '../datetimeutil';
 
+import FeatureGraph from './FeatureGraph';
 import Spinner from './Spinner';
 
 const DATA_NOT_LOADED = 0;
@@ -45,7 +46,7 @@ export default (props) => {
         case DATA_NOT_LOADED:
             return <Spinner />;
         case DATA_LOADED:
-            return <div>{JSON.stringify(graphData)}</div>;
+            return <FeatureGraph graphData={graphData} />;
         case DATA_LOADING_FAILED:
             // TODO: show error in a user-friendly way
             return <div>ERROR LOADING DATA</div>;

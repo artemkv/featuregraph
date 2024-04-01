@@ -18,7 +18,7 @@ How to instrument your app:
             window['featuregraph.net'] = { config };
             var js = document.createElement('script');
             var fjs = document.getElementsByTagName('script')[0];
-            js.src = "http://agent.featuregraph.net/featuregraph.bundle.min.js";
+            js.src = "https://agent.featuregraph.net/featuregraph.bundle.min.js";
             js.async = 1;
             fjs.parentNode.insertBefore(js, fjs);
         })(config);

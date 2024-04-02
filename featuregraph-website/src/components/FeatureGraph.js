@@ -5,6 +5,8 @@ import { from } from 'datashaper-js';
 // https://louisem.com/421408/gray-hex-codes
 // https://htmlcolorcodes.com/colors/shades-of-gray/
 
+const FATTEST_ARROW_WIDTH = 20;
+
 export default (props) => {
     const graphData = props.graphData;
 
@@ -17,9 +19,10 @@ export default (props) => {
         }))
         .return();
 
-    const total = from(graphData.edges ?? [])
+    const max = from(graphData.edges ?? [])
         .map(x => (x.count))
-        .return().reduce((acc, a) => acc + a, 0);
+        .return()
+        .reduce((acc, a) => (acc < a ? a : acc), 0);
 
     const edges = from(graphData.edges ?? [])
         .map(x => ({
@@ -27,7 +30,7 @@ export default (props) => {
                 id: `${x.from}->${x.to}`,
                 source: x.from,
                 target: x.to,
-                w: x.count / total * 20
+                w: x.count * FATTEST_ARROW_WIDTH / max
             }
         }))
         .return();

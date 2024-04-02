@@ -28,6 +28,16 @@
   background-image: url('../public/hero_chart.png');
 }
 
+.public-home {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.fillspace {
+  flex: 1;
+}
+
 .footer {
   height: 100px;
 }

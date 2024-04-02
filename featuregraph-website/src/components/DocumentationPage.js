@@ -44,7 +44,7 @@ export default function App() {
                 </div>
             </div>
             <div className="mobile">
-                <nav className="nav teal">
+                <nav className="nav light-blue">
                     <a href="#" data-target="slide-out" className="sidenav-trigger">
                         <i className="material-icons">menu</i>
                     </a>

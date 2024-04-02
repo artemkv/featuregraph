@@ -2,12 +2,24 @@ import React, { useEffect, useRef } from 'react';
 import cytoscape from 'cytoscape';
 import { from } from 'datashaper-js';
 
+// https://louisem.com/421408/gray-hex-codes
+// https://htmlcolorcodes.com/colors/shades-of-gray/
+
 export default (props) => {
     const graphData = props.graphData;
 
     const nodes = from(graphData.nodes ?? [])
-        .map(x => ({ data: { id: x.feature } }))
+        .map(x => ({
+            data: {
+                id: x.feature,
+                cnt: x.count
+            }
+        }))
         .return();
+
+    const total = from(graphData.edges ?? [])
+        .map(x => (x.count))
+        .return().reduce((acc, a) => acc + a, 0);
 
     const edges = from(graphData.edges ?? [])
         .map(x => ({
@@ -15,7 +27,7 @@ export default (props) => {
                 id: `${x.from}->${x.to}`,
                 source: x.from,
                 target: x.to,
-                w: x.count
+                w: x.count / total * 20
             }
         }))
         .return();
@@ -34,17 +46,17 @@ export default (props) => {
                 {
                     selector: 'node',
                     style: {
-                        'background-color': '#DDD',
-                        'label': 'data(id)',
-                        'color': '#333'
+                        'background-color': '#C0C0C0',
+                        'label': function (ele) { return `${ele.data('id')} (${ele.data('cnt')})`; },
+                        'color': '#363636'
                     }
                 },
                 {
                     selector: 'edge',
                     style: {
                         'width': 'data(w)',
-                        'line-color': '#EEE',
-                        'target-arrow-color': '#EEE',
+                        'line-color': '#C0C0C0',
+                        'target-arrow-color': '#C0C0C0',
                         'target-arrow-shape': 'triangle',
                         'curve-style': 'bezier'
                     }

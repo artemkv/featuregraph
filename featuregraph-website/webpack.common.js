@@ -59,6 +59,7 @@ module.exports = {
         new CopyPlugin({
             patterns: [
                 { from: './public/favicon.ico' },
+                { from: './public/hero_graph.png' },
             ]
         })
     ],

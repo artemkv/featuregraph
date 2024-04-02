@@ -1,26 +1,31 @@
 import React from 'react';
 
-// teal darken-2
 export default (props) => {
-    return <div>
-        <div className="teal darken-2">
-            <div className="hero">
-            </div>
-        </div>
+    return <div className="public-home">
         <div className="row">
             <h1 className="center-align">FeatureGraph</h1>
-            <p className='center'><em>Blah-blah-blah</em></p>
+            <p className='center'><em>Anonymous Web Analytics</em></p>
         </div>
         <div className="desktop">
+            <div className="row center">
+                <img src="/hero_graph.png" alt="Graph" width="50%" />
+            </div>
         </div>
         <div className="mobile">
-        </div>
-        <footer className="page-footer teal darken-2">
-            <div className="footer"></div>
-            <div className="footer-copyright">
-                <div className="container">
-                </div>
+            <div className="row center">
+                <img src="/hero_graph.png" alt="Graph" width="50%" />
             </div>
-        </footer>
+        </div>
+        <div className="row center fillspace">
+        </div>
+        <div>
+            <footer className="page-footer light-blue darken-2">
+                <div className="footer"></div>
+                <div className="footer-copyright">
+                    <div className="container">
+                    </div>
+                </div>
+            </footer>
+        </div>
     </div>;
 };
